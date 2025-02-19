@@ -21,4 +21,8 @@ Por último se deberá abrir una terminal tipo gitbash en la raíz del proyecto 
 
 - PostgreSQL: Base de datos relacional que persiste la información del sistema y con la cuál interactuan los microservicios. 
 
+En la raíz del proyecto encontrará un archivo **`e-commerce.postman_collection.json`** que deberá importar en postman para usar la API de manera optima y así garantizar que esté funcionando. Al crear una orden se le enviará un correo al email especificado.
+
+Otra manera de comprobar el funcionamiento es ingresar a la url **`http://localhost:3000/api`**, esta lo redireccionará a la documentación de la API. 
+
 Postdata: Para este proyecto se siguió el patrón Shared-database para fines demostrativos y ligereza del proyecto mismo. Sin embargo, en un ambiente productivo lo ideal es tener una base de datos por microservicio para preservar el principio de responsabilidad única y respetar las barreras de pertenecia de datos entre los dominios representados y manejados por los microservicios.

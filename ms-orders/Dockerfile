@@ -10,9 +10,6 @@ RUN npm install -g @nestjs/cli
 RUN npm install --save-dev @types/node
 RUN npm install prisma --save-dev
 
-COPY wait-for-postgres.sh /usr/local/bin/wait-for-postgres.sh
-RUN chmod +x /usr/local/bin/wait-for-postgres.sh
-
 COPY . .
 
 RUN npm install
@@ -28,11 +25,7 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /usr/local/bin/wait-for-postgres.sh /usr/local/bin/wait-for-postgres.sh
-RUN chmod +x /usr/local/bin/wait-for-postgres.sh
 
 EXPOSE 3002
 
-ENTRYPOINT ["wait-for-postgres.sh"]
-
-CMD ["npm", "run", "start:migrate:prod"]
+CMD sh -c "sleep 20 && npm run start:migrate:prod"

@@ -11,12 +11,18 @@ services:
       - "5432:5432"
     volumes:
       - ./postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U root -d ecommercedb" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   ms-users:
     build: ./ms-users
     container_name: ms_users_service
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "3001:3001"
     env_file:
@@ -26,8 +32,10 @@ services:
     build: ./ms-orders
     container_name: ms_orders_service
     depends_on:
-      - db
-      - kafka
+      db:
+        condition: service_healthy
+      kafka:
+        condition: service_started
     ports:
       - "3002:3002"
     env_file:
@@ -37,8 +45,10 @@ services:
     build: ./ms-notifications
     container_name: ms_notifications_service
     depends_on:
-      - kafka
-      - db
+      kafka:
+        condition: service_started
+      db:
+        condition: service_healthy
     ports:
       - "3003:3003"
     env_file:
@@ -48,7 +58,8 @@ services:
     build: ./api-gateway
     container_name: api_gateway_service
     depends_on:
-      - ms-users
+      ms-users:
+        condition: service_started
     env_file:
       - ./api-gateway/.env.prod
     ports:
@@ -61,6 +72,7 @@ services:
       - 2181:2181
     volumes:
       - ./_data/zookeeper/data:/data
+
   kafka:
     image: wurstmeister/kafka:2.12-2.5.0
     hostname: kafka
@@ -80,6 +92,7 @@ services:
       - ./_data/kafka/data:/var/lib/kafka/data
     depends_on:
       - zookeeper
+
 networks:
   elastic:
     driver: bridge

@@ -11,9 +11,6 @@ RUN npm install --save-dev @types/node
 RUN npm install prisma --save-dev
 RUN apk add --no-cache python3 make g++  # Required for bcrypt
 
-COPY wait-for-postgres.sh /usr/local/bin/wait-for-postgres.sh
-RUN chmod +x /usr/local/bin/wait-for-postgres.sh
-
 COPY . .
 
 RUN npm install
@@ -32,14 +29,10 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /usr/local/bin/wait-for-postgres.sh /usr/local/bin/wait-for-postgres.sh
-RUN chmod +x /usr/local/bin/wait-for-postgres.sh
 
 # Rebuild bcrypt in the final image
 RUN npm rebuild bcrypt --build-from-source
 
 EXPOSE 3001
 
-ENTRYPOINT ["wait-for-postgres.sh"]
-
-CMD ["npm", "run", "start:migrate:prod"]
+CMD sh -c "sleep 20 && npm run start:migrate:prod"

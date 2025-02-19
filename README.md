@@ -1,11 +1,13 @@
 
 # E-commerce | NestJS | Microservicios | Docker | Kafka
 
+**Antes de comenzar asegurese de tener instalado Docker Desktop en la maquina donde se ejecutará el proyecto.**
+
 Este proyecto consiste en una API basada en microservicios para gestionar pedidos de un e-commerce. Está desarrollado con NestJS y utiliza PostgreSQL, Prisma, Docker y Kafka para la comunicación entre microservicios.
 
 Para su ejecución se deben configurar las variables de entorno faltantes en los archivos **`.env.example`** de cada microservicio.
 
-Posterior a esto, se deberá cambiar el nombre de estos archivos de **`.env.example`** a **`.env.prod`**
+Posterior a esto, se deberá cambiar el nombre de los archivos **`.env.example`** a **`.env.prod`**
 
 Por último se deberá abrir una terminal tipo gitbash en la raíz del proyecto y allí ejecutaremos el comando **`./start-prod.sh`**. Este comando desplegará una arquitectura de microservicios en base a contenedores de Docker con los siguientes componentes: 
 
